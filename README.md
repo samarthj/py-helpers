@@ -12,4 +12,4 @@ Helpers for logging, sleeping, and other common functional work done across proj
 
 ## RetryHandler
 
-Samples can be found here in the [tests](https://github.com/samarthj/py-helpers/tests/test_retry_handler.py)
+Samples can be found here in the [tests](https://github.com/samarthj/py-helpers/blob/main/tests/test_retry_handler.py)
