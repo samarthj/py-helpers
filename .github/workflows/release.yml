@@ -164,9 +164,6 @@ jobs:
           git status
           git commit -S -m "ci(github-actions): :construction_worker: v$(poetry version -s)"
           poetry run cz changelog --unreleased-version "v$(poetry version -s)"
-          git tag "v${{ steps.version.outputs.next_tag }}" -m "v${{ steps.version.outputs.next_tag }}"
-          git push --follow-tags
-          poetry build
 
       - name: Release ${{ steps.version.outputs.next_release }}
         id: github_release
@@ -174,12 +171,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git tag "v${{ steps.version.outputs.next_release }}" -m "v${{ steps.version.outputs.next_release }}"
+          git push --follow-tags
+          poetry build
           prev_release="$(gh release list | grep -i latest | cut -f1)"
           echo $prev_release
           [[ "v${{ steps.version.outputs.next_release }}" == "${prev_release}" ]] && exit 0
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
-          gh release create "v${{ steps.version.outputs.next_tag }}" -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
+          gh release create "v${{ steps.version.outputs.next_release }}" -F NEW_RELEASE.md ./dist/*.tar.gz ./dist/*.whl
 
       - name: Prerelease ${{ steps.version.outputs.next_prerelease }}
         id: github_prerelease
@@ -187,12 +187,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git tag "v${{ steps.version.outputs.next_prerelease }}" -m "v${{ steps.version.outputs.next_prerelease }}"
+          git push --follow-tags
+          poetry build
           prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
           echo $prev_release
           [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
-          gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
+          gh release create "v${{ steps.version.outputs.next_prerelease }}" --prerelease -F NEW_RELEASE.md ./dist/*.tar.gz ./dist/*.whl
 
       - name: Publish distribution 📦 to Test PyPI
         if: ${{ (steps.github_release.outcome == 'success') || (steps.github_prerelease.outcome == 'success') }}
