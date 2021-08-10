@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  install-format-test-build-commit-release:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

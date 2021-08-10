@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  install-format-test-build-commit-release:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
