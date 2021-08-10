@@ -4,11 +4,11 @@ classifiers = ["Topic :: Software Development :: Libraries :: Python Modules"]
 description = "Helpers for logging, sleeping, and other common functional work done across projects"
 homepage    = "https://github.com/samarthj/py-helpers"
 license     = "GPL-3.0-or-later"
-name        = "helpers"
+name        = "py-helpers"
 packages    = [{include = "helpers"}]
 readme      = "README.md"
 repository  = "https://github.com/samarthj/py-helpers"
-version = "0.0.0b14"
+version = "0.0.14"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/samarthj/py-helpers/issues"

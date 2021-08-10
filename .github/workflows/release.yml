@@ -169,6 +169,7 @@ jobs:
           poetry build
 
       - name: Release ${{ steps.version.outputs.next_release }}
+        id: github_release
         if: ${{ (steps.set_release.outcome == 'success') && (steps.commit_build.outcome == 'success') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -177,8 +178,11 @@ jobs:
           [[ "v${{ steps.version.outputs.next_release }}" == "${prev_release}" ]] && exit 0
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}"
           gh release create "v${{ steps.version.outputs.next_tag }}" -F CHANGELOG.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
+          poetry-dynamic-versioning
+          poetry build
 
       - name: Prerelease ${{ steps.version.outputs.next_prerelease }}
+        id: github_prerelease
         if: ${{ (steps.set_prerelease.outcome == 'success') && (steps.commit_build.outcome == 'success') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -187,4 +191,13 @@ jobs:
           [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}"
           gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F CHANGELOG.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
+          poetry-dynamic-versioning
+          poetry build
+
+      - name: Publish distribution 📦 to Test PyPI
+        if: ${{ (steps.github_release.outcome == 'success') || (steps.github_prerelease.outcome == 'success') }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.TEST_PYPI_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
 
