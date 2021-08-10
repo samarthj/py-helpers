@@ -180,8 +180,6 @@ jobs:
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
           gh release create "v${{ steps.version.outputs.next_tag }}" -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
-          poetry-dynamic-versioning
-          poetry build
 
       - name: Prerelease ${{ steps.version.outputs.next_prerelease }}
         id: github_prerelease
@@ -195,8 +193,6 @@ jobs:
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
           gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
-          poetry-dynamic-versioning
-          poetry build
 
       - name: Publish distribution 📦 to Test PyPI
         if: ${{ (steps.github_release.outcome == 'success') || (steps.github_prerelease.outcome == 'success') }}
