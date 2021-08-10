@@ -23,14 +23,14 @@ jobs:
           python-version: '3.x'
           architecture: 'x64'
       - name: Get pip cache dir
-        id: pip-cache
+        id: pip-cache-dir
         run: |
           echo "::set-output name=dir::$(pip cache dir)"
       - name: Load pip cache
         id: pip-cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ steps.pip-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-pip-poetry-poe-semver
           restore-keys: |
             ${{ runner.os }}-pip-poetry-poe-semver
@@ -40,14 +40,14 @@ jobs:
           pip install poetry poethepoet poetry-dynamic-versioning
 
       - name: Get poetry cache dir
-        id: poetry-cache
+        id: poetry-cache-dir
         run: |
           echo "::set-output name=dir::$(poetry config cache-dir)"
       - name: Load poetry cache
         id: poetry-cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.poetry-cache.outputs.dir }}
+          path: ${{ steps.poetry-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
