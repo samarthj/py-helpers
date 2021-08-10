@@ -115,14 +115,14 @@ jobs:
           next_base="$(poetry version -s | sed -re 's|^([0-9.]+)([abrc]*)([0-9]*)|\1|g')"
           major="$(echo $next_base | sed -re 's|^([0-9]+).([0-9]+).([0-9]+)|\1|g')"
           minor="$(echo $next_base | sed -re 's|^([0-9]+).([0-9]+).([0-9]+)|\2|g')"
-          next_tag="${major}.${minor}"
           next_release="${major}.${minor}.${version_revision}"
           next_prerelease="${next_base}${version_stage}${version_revision}"
-          echo "Delete next tag if exists - v$next_tag"
-          git tag --delete "v${next_tag}" || true
-          git push --delete origin "v${next_tag}" || true
+          # next_tag="${major}.${minor}"
+          # echo "Delete next tag if exists - v$next_tag"
+          # git tag --delete "v${next_tag}*" || true
+          # git push --delete origin "v${next_tag}*" || true
           echo "$next_base $next_release $next_prerelease"
-          echo "::set-output name=next_tag::$next_tag"
+          echo "::set-output name=next_tag::$next_release"
           echo "::set-output name=next_base::$next_base"
           echo "::set-output name=next_release::$next_release"
           echo "::set-output name=next_prerelease::${next_prerelease}"
