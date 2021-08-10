@@ -174,10 +174,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
+          prev_release="$(gh release list | grep -i latest | cut -f1)"
+          echo $prev_release
           [[ "v${{ steps.version.outputs.next_release }}" == "${prev_release}" ]] && exit 0
-          poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}"
-          gh release create "v${{ steps.version.outputs.next_tag }}" -F CHANGELOG.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
+          echo "" > NEW_RELEASE.md
+          poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
+          gh release create "v${{ steps.version.outputs.next_tag }}" -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
           poetry-dynamic-versioning
           poetry build
 
@@ -188,9 +190,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
+          echo $prev_release
           [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
-          poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}"
-          gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F CHANGELOG.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
+          echo "" > NEW_RELEASE.md
+          poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
+          gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F NEW_RELEASE.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
           poetry-dynamic-versioning
           poetry build
 
