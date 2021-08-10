@@ -8,7 +8,7 @@ name        = "pylib-helpers"
 packages    = [{include = "helpers"}]
 readme      = "README.md"
 repository  = "https://github.com/samarthj/pylib-helpers"
-version     = "0.1.0b17"
+version = "0.2.0a1"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/samarthj/pylib-helpers/issues"
