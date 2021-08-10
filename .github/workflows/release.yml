@@ -201,3 +201,9 @@ jobs:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
 
+      - name: Publish distribution 📦 to PyPI
+        if: ${{ steps.github_release.outcome == 'success' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
