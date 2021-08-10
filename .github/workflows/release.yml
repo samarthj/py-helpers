@@ -169,7 +169,7 @@ jobs:
           prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
           [[ "v${{ steps.version.outputs.next_release }}" == "${prev_release}" ]] && exit 0
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}"
-          gh release create --target "v${{ steps.version.outputs.next_tag }}" -F CHANGELOG.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
+          gh release create "v${{ steps.version.outputs.next_tag }}" -F CHANGELOG.md -t "v${{ steps.version.outputs.next_release }}" ./dist/*.tar.gz ./dist/*.whl
 
       - name: Prerelease ${{ steps.version.outputs.next_prerelease }}
         if: ${{ (steps.set_prerelease.outcome == 'success') && (steps.commit_build.outcome == 'success') }}
@@ -179,5 +179,5 @@ jobs:
           prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
           [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}"
-          gh release create --target "v${{ steps.version.outputs.next_tag }}" --prerelease -F CHANGELOG.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
+          gh release create "v${{ steps.version.outputs.next_tag }}" --prerelease -F CHANGELOG.md -t "v${{ steps.version.outputs.next_prerelease }}" ./dist/*.tar.gz ./dist/*.whl
 
