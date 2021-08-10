@@ -8,7 +8,7 @@ name        = "py-helpers"
 packages    = [{include = "helpers"}]
 readme      = "README.md"
 repository  = "https://github.com/samarthj/py-helpers"
-version = "0.1.0a1"
+version = "0.1.0b17"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/samarthj/py-helpers/issues"
