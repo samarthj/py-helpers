@@ -49,6 +49,136 @@ def test_count_retries():
         assert retrier.RETRY_ATTEMPTS == 4
 
 
+def test_error_pass_through():
+    def callback_for_error(error_obj):
+        assert error_obj
+        assert isinstance(error_obj, ValueError)
+
+    retrier = RetryHandler(
+        (ValueError,), max_retries=3, wait_time=0, err_callbacks={"ValueError": (callback_for_error, {})}
+    )
+
+    @retrier.wrap
+    def test_function(*args, **kwargs):
+        if kwargs["errors"] > retrier.RETRY_ATTEMPTS:
+            raise ValueError("This is a test error")
+
+    test_function(errors=1)
+    assert retrier.RETRY_ATTEMPTS == 1
+
+
+def test_error_multiple_handlers():
+    def callback_for_valueerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, ValueError)
+
+    def callback_for_runtimeerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, RuntimeError)
+
+    retrier = RetryHandler(
+        (
+            ValueError,
+            RuntimeError,
+        ),
+        max_retries=3,
+        wait_time=0,
+        err_callbacks={
+            "ValueError": (callback_for_valueerror, {}),
+            "RuntimeError": (callback_for_runtimeerror, {}),
+        },
+    )
+
+    @retrier.wrap
+    def test_function(*args, **kwargs):
+        print(retrier.RETRY_ATTEMPTS)
+        if retrier.RETRY_ATTEMPTS == 0:
+            raise ValueError("This is a value error")
+        if retrier.RETRY_ATTEMPTS == 1:
+            raise RuntimeError("This is a runtime error")
+
+    test_function(errors=2)
+    assert retrier.RETRY_ATTEMPTS == 2
+
+
+def test_error_early_exit():
+    def callback_for_valueerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, ValueError)
+        return (True, "fancy_return")
+
+    def callback_for_runtimeerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, RuntimeError)
+
+    retrier = RetryHandler(
+        (
+            ValueError,
+            RuntimeError,
+        ),
+        max_retries=3,
+        wait_time=0,
+        err_callbacks={
+            "ValueError": (callback_for_valueerror, {}),
+            "RuntimeError": (callback_for_runtimeerror, {}),
+        },
+    )
+
+    @retrier.wrap
+    def test_function(*args, **kwargs):
+        print(retrier.RETRY_ATTEMPTS)
+        if retrier.RETRY_ATTEMPTS == 0:
+            raise ValueError("This is a value error")
+        if retrier.RETRY_ATTEMPTS == 1:
+            raise RuntimeError("This is a runtime error")
+
+    res = test_function(errors=2)
+    assert retrier.RETRY_ATTEMPTS == 0
+    assert res == "fancy_return"
+
+
+def test_error_late_exit():
+    def callback_for_valueerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, ValueError)
+
+    def callback_for_runtimeerror(error_obj):
+        print(error_obj)
+        assert error_obj
+        assert isinstance(error_obj, RuntimeError)
+        return (True, "fancy_return")
+
+    retrier = RetryHandler(
+        (
+            ValueError,
+            RuntimeError,
+        ),
+        max_retries=3,
+        wait_time=0,
+        err_callbacks={
+            "ValueError": (callback_for_valueerror, {}),
+            "RuntimeError": (callback_for_runtimeerror, {}),
+        },
+    )
+
+    @retrier.wrap
+    def test_function(*args, **kwargs):
+        print(retrier.RETRY_ATTEMPTS)
+        if retrier.RETRY_ATTEMPTS == 0:
+            raise ValueError("This is a value error")
+        if retrier.RETRY_ATTEMPTS == 1:
+            raise RuntimeError("This is a runtime error")
+
+    res = test_function(errors=2)
+    assert retrier.RETRY_ATTEMPTS == 1
+    assert res == "fancy_return"
+
+
 def test_success():
 
     retrier = RetryHandler((ValueError,), max_retries=3, wait_time=0)

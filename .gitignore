@@ -2,6 +2,7 @@
 
 !pyproject.toml
 !poetry.lock
+!poetry.toml
 
 !helpers/*.py
 !tests/*.py
