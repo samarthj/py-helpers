@@ -128,8 +128,8 @@ jobs:
           next_prerelease="${next_base}${version_stage}${version_revision}"
           next_tag="${major}.${minor}"
           echo "Delete next tag if exists - v${next_tag}*"
-          git tag --delete "v${next_tag}*" || true
-          git push --delete origin "v${next_tag}*" || true
+          git tag -l "v${next_tag}*" | xargs -I{} git push --delete origin {} || true
+          git tag -l "v${next_tag}*" | xargs -I{} git tage --delete {} || true
           echo "$next_base $next_release $next_prerelease"
           echo "::set-output name=next_tag::$next_release"
           echo "::set-output name=next_base::$next_base"
