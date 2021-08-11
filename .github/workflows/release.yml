@@ -28,7 +28,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
       - name: Load pip cache
         id: pip-cache
-        uses: actions/cache@v2
+        uses: actions/cache@main
         with:
           path: ${{ steps.pip-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-pip-poetry-poe-semver
@@ -45,16 +45,18 @@ jobs:
           echo "::set-output name=dir::$(poetry config cache-dir)"
       - name: Load poetry cache
         id: poetry-cache
-        uses: actions/cache@v2
+        uses: actions/cache@main
         with:
-          path: ${{ steps.poetry-cache-dir.outputs.dir }}
+          path: |
+            ${{ steps.poetry-cache-dir.outputs.dir }}
+            ./.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
       - name: Update the dependencies using poetry
         run: |
           poetry update
-          poetry install
+          poetry install --remove-untracked
           poetry config --list
 
       - name: Format with isort
@@ -154,9 +156,10 @@ jobs:
         run: |
           poetry version ${{ steps.version.outputs.next_prerelease }}
 
-      - name: Commit and Build ${{ steps.version.outputs.next_release }}
-        id: commit_build
+      - name: Commit ${{ steps.version.outputs.next_release }}
+        id: commit
         if: ${{ (steps.set_release.outcome == 'success') || (steps.set_prerelease.outcome == 'success') }}
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -167,37 +170,40 @@ jobs:
 
       - name: Release ${{ steps.version.outputs.next_release }}
         id: github_release
-        if: ${{ (steps.set_release.outcome == 'success') && (steps.commit_build.outcome == 'success') }}
+        if: ${{ (steps.set_release.outcome == 'success') && (steps.commit.outcome == 'success') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git tag "v${{ steps.version.outputs.next_release }}" -m "v${{ steps.version.outputs.next_release }}"
-          git push --follow-tags
-          poetry build
           prev_release="$(gh release list | grep -i latest | cut -f1)"
           echo $prev_release
           [[ "v${{ steps.version.outputs.next_release }}" == "${prev_release}" ]] && exit 0
+          git tag "v${{ steps.version.outputs.next_release }}" -m "v${{ steps.version.outputs.next_release }}"
+          git push --follow-tags
+          poetry build
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_release }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
           gh release create "v${{ steps.version.outputs.next_release }}" -F NEW_RELEASE.md ./dist/*.tar.gz ./dist/*.whl
 
       - name: Prerelease ${{ steps.version.outputs.next_prerelease }}
         id: github_prerelease
-        if: ${{ (steps.set_prerelease.outcome == 'success') && (steps.commit_build.outcome == 'success') }}
+        if: ${{ (steps.set_prerelease.outcome == 'success') && (steps.commit.outcome == 'success') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          prev_release="$(gh release list | grep -i latest | cut -f1)"
+          prev_prerelease="$(gh release list | grep -i pre-latest | cut -f1)"
+          echo "$prev_release $prev_prerelease"
+          [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
+          [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_prerelease}" ]] && exit 0
           git tag "v${{ steps.version.outputs.next_prerelease }}" -m "v${{ steps.version.outputs.next_prerelease }}"
           git push --follow-tags
           poetry build
-          prev_release="$(gh release list -L 2 | tail -n1 | grep -i pre-release | cut -f1)"
-          echo $prev_release
-          [[ "v${{ steps.version.outputs.next_prerelease }}" == "${prev_release}" ]] && exit 0
           echo "" > NEW_RELEASE.md
           poetry run cz changelog --unreleased-version "v${{ steps.version.outputs.next_prerelease }}" --start-rev "${prev_release}" --file-name NEW_RELEASE.md || true
           gh release create "v${{ steps.version.outputs.next_prerelease }}" --prerelease -F NEW_RELEASE.md ./dist/*.tar.gz ./dist/*.whl
 
       - name: Publish distribution 📦 to Test PyPI
+        id: test_pypi
         if: ${{ (steps.github_release.outcome == 'success') || (steps.github_prerelease.outcome == 'success') }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -205,8 +211,7 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
 
       - name: Publish distribution 📦 to PyPI
-        if: ${{ steps.github_release.outcome == 'success' }}
+        if: ${{ (steps.github_release.outcome == 'success') && (steps.test_pypi.outcome == 'success') }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
-
