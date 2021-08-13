@@ -101,8 +101,14 @@ jobs:
           prerelease="$(gh release list | grep -i pre-release | cut -f1)"
           echo $prerelease
           if [[ -n "${prerelease}" ]]; then
-            echo "current pre-release - $prerelease"
+            echo "Current pre-release - $prerelease"
             gh release delete -y "${prerelease}" || true
+            major="$(echo $prerelease | sed -re 's|^v([0-9]+).([0-9]+).([0-9]+)(.*)|\1|g')"
+            minor="$(echo $prerelease | sed -re 's|^v([0-9]+).([0-9]+).([0-9]+)(.*)|\2|g')"
+            pre_maj_min="v${major}.${minor}*"
+            echo "Delete pre-release tag if exists - $(git tag -l "$pre_maj_min")"
+            git tag -l "$pre_maj_min" | xargs -I{} git push --delete origin {} || true
+            git tag -l "$pre_maj_min" | xargs -I{} git tage --delete {} || true
           fi
 
       - name: Version Evaluation
@@ -110,8 +116,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
+          prev_release="$(gh release list | grep -i latest | cut -f1)"
           poetry-dynamic-versioning
-          echo "$(poetry version -s)"
+          echo "dynamic: $(poetry version -s) release: $prev_release"
           version_base="$(poetry version -s | sed -re 's|^([0-9.]+)([abrc]*)([0-9]*)|\1|g')"
           version_stage="$(poetry version -s | sed -re 's|^([0-9.]+)([abrc]*)([0-9]*)|\2|g')"
           version_revision="$(poetry version -s | sed -re 's|^([0-9.]+)([abrc]*)([0-9]*)|\3|g')"
@@ -126,10 +133,6 @@ jobs:
           minor="$(echo $next_base | sed -re 's|^([0-9]+).([0-9]+).([0-9]+)|\2|g')"
           next_release="${major}.${minor}.${version_revision}"
           next_prerelease="${next_base}${version_stage}${version_revision}"
-          next_tag="${major}.${minor}"
-          echo "Delete next tag if exists - v${next_tag}*"
-          git tag -l "v${next_tag}*" | xargs -I{} git push --delete origin {} || true
-          git tag -l "v${next_tag}*" | xargs -I{} git tage --delete {} || true
           echo "$next_base $next_release $next_prerelease"
           echo "::set-output name=next_tag::$next_release"
           echo "::set-output name=next_base::$next_base"
