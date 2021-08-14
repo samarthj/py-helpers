@@ -108,7 +108,7 @@ jobs:
             pre_maj_min="v${major}.${minor}*"
             echo "Delete pre-release tag if exists - $(git tag -l "$pre_maj_min")"
             git tag -l "$pre_maj_min" | xargs -I{} git push --delete origin {} || true
-            git tag -l "$pre_maj_min" | xargs -I{} git tage --delete {} || true
+            git tag -l "$pre_maj_min" | xargs -I{} git tag --delete {} || true
           fi
 
       - name: Version Evaluation
