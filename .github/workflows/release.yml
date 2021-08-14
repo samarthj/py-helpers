@@ -212,9 +212,11 @@ jobs:
         with:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
+        continue-on-error: true
 
       - name: Publish distribution 📦 to PyPI
         if: ${{ steps.test_pypi.outcome == 'success' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+        continue-on-error: true
