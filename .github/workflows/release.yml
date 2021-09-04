@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 1 * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.repository }}
@@ -39,7 +42,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install poetry poethepoet poetry-dynamic-versioning
+          pip install poetry poethepoet
       - name: Get poetry cache dir
         id: poetry-cache-dir
         shell: bash
@@ -56,35 +59,76 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-poetry-
 
+      - name: Update the project
+        id: update
+        continue-on-error: true
+        run: |
+
+          echo "=============================="
+          echo "Run poetry update"
+          echo "++++++++++++++++++++++++++++++"
+          poetry update
+          poetry install --remove-untracked
+          poetry config --list
+
+          echo "=============================="
+          echo "Run pycln"
+          echo "++++++++++++++++++++++++++++++"
+          poe style-pycln
+          poe format-pycln
+
+          echo "=============================="
+          echo "Run isort"
+          echo "++++++++++++++++++++++++++++++"
+          poe style-imports
+          poe format-imports
+
+          echo "=============================="
+          echo "Run black"
+          echo "++++++++++++++++++++++++++++++"
+          poe style
+          poe format
+
+          echo "=============================="
+          echo "Run pytest"
+          echo "++++++++++++++++++++++++++++++"
+          poe test
+
+          echo "=============================="
+          echo "Run linting"
+          echo "++++++++++++++++++++++++++++++"
+          poe lint-plugins
+          # exit-zero treats all errors as warnings.
+          poe lint --count --exit-zero --statistics || true
+
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v3
         with:
           gpg-private-key: ${{ secrets.PGP_PRIVATE_KEY }}
           git-user-signingkey: true
-          git-commit-gpgsign: true
 
-      - uses: samarthj/poetry-dynamic-release@main
+      - name: Setup git config
+        if: ${{ steps.update.outcome == 'success' }}
+        id: git
+        run: |
+          echo "::set-output name=diff::$(git diff FETCH_HEAD --stat)"
+          echo "=============================="
+          echo "Setup git config"
+          echo "++++++++++++++++++++++++++++++"
+          git config user.name "Sam"
+          git config user.email dev@samarthj.com
+          git config user.signkey dev@samarthj.com
+          git config init.defaultBranch main
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+
+          git add .
+          git status
+          git commit -S -m "ci(github-actions): :construction_worker: update, format, lint, test" || true
+
+      - name: Python Semantic Release
         id: github_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.git.outcome == 'success' }}
+        uses: relekang/python-semantic-release@master
         with:
-          poetry-update: true
-          git-username: Sam
-          git-email: dev@samarthj.com
-          git-gpg-email: dev@samarthj.com
-
-      - name: Publish distribution 📦 to Test PyPI
-        id: test_pypi
-        if: ${{ steps.github_release.outcome == 'success' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.TEST_PYPI_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-        continue-on-error: true
-
-      - name: Publish distribution 📦 to PyPI
-        if: ${{ steps.test_pypi.outcome == 'success' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-        continue-on-error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pypi_token: ${{ secrets.PYPI_API_TOKEN }}

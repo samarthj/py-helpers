@@ -21,11 +21,11 @@ version = "0.3.0a8"
 colorama = {version = "^0.4.4", allow-prereleases = true}
 python   = ">=3.9,<4.0"
 
-
 [tool.poetry.dev-dependencies]
 autopep8                     = {version = "*", allow-prereleases = true}
 bandit                       = {version = "*", allow-prereleases = true}
 black                        = {version = "*", allow-prereleases = true}
+colorama                     = {version = "*", allow-prereleases = true}
 commitizen                   = {version = "*", allow-prereleases = true}
 flake8                       = {version = "*", allow-prereleases = true}
 flake8-bandit                = {version = "*", allow-prereleases = true}
@@ -42,10 +42,38 @@ isort                        = {version = "*", allow-prereleases = true}
 mccabe                       = {version = "*", allow-prereleases = true}
 mypy                         = {version = "*", allow-prereleases = true}
 pep8-naming                  = {version = "*", allow-prereleases = true}
+pycln                        = {version = "*", allow-prereleases = true}
 pylint                       = {version = "*", allow-prereleases = true}
 pyproject-flake8             = {version = "*", allow-prereleases = true}
 pytest                       = {version = "*", allow-prereleases = true}
 rope                         = {version = "*", allow-prereleases = true}
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires      = ["poetry-core>=1.0.0"]
+
+## Poe the Poet -- task definitions for global environment
+[tool.poe.tasks]
+format         = {cmd = "black --config pyproject.toml --color .", help = "Format code using black config"}
+format-imports = {cmd = "isort --settings-file pyproject.toml --color .", help = "Optimize and sort imports"}
+format-pycln   = {cmd = "pycln --diff --config pyproject.toml .", help = "Remove unused imports"}
+lint           = {cmd = "pflake8", help = "Print lint errors"}
+lint-plugins   = {cmd = "pflake8 --version", help = "Print plugins used for linting"}
+style          = {cmd = "black --config pyproject.toml --color --diff .", help = "Check code style"}
+style-imports  = {cmd = "isort --settings-file pyproject.toml --color --diff .", help = "Check code style"}
+style-pycln    = {cmd = "pycln --diff --config pyproject.toml .", help = "Check code style"}
+test           = {cmd = "pytest", help = "Run the tests"}
+
+clean = """
+rm -rf .mypy_cache
+       .pytest_cache
+       .venv
+       poetry.lock
+       dist
+       build
+       ./**/__pycache__
+       __pypackages__
+"""
 
 [tool.black]
 line_length = 120
@@ -77,88 +105,26 @@ max-line-length           = 120
 max-returns-amount        = 5
 show-source               = "true"
 
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires      = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+[tool.pytest.ini_options]
+addopts   = "-ra"
+testpaths = ["tests"]
 
-## Poe the Poet -- task definitions for global environment
-[tool.poe.tasks]
-format         = {cmd = "black --config pyproject.toml --color .", help = "Format code using black config"}
-format-imports = {cmd = "isort --settings-file pyproject.toml --color .", help = "Optimize and sort imports"}
-lint           = {cmd = "pflake8", help = "Print lint errors"}
-lint-plugins   = {cmd = "pflake8 --version", help = "Print plugins used for linting"}
-style          = {cmd = "black --config pyproject.toml --color --diff .", help = "Check code style"}
-style-imports  = {cmd = "isort --settings-file pyproject.toml --color --diff .", help = "Check code style"}
-test           = {cmd = "pytest tests", help = "Run the tests"}
+[tool.pycln]
+all          = true
+exclude      = '(__pypackages__|__pycache__|\.pytest_cache|\.github|\.git|\.venv|\.mypy_cache|\.vscode)'
+expand_stars = true
+include      = '(helpers|tests).*\.py$'
+no_gitignore = false
+path         = "helpers"
+verbose      = false
 
-clean = """
-rm -rf .mypy_cache
-       .pytest_cache
-       .venv
-       poetry.lock
-       dist
-       build
-       ./**/__pycache__
-"""
-
-[tool.poetry-dynamic-versioning]
-format-jinja = """
-    {%- if distance == 0 -%}
-        {{ serialize_pep440(base, stage, revision) }}
-    {%- elif distance > 20 -%}
-        {{ serialize_pep440(base, stage="rc", revision=distance) }}
-    {%- elif distance > 10 -%}
-        {{ serialize_pep440(base, stage="b", revision=distance) }}
-    {%- elif distance > 0 -%}
-        {{ serialize_pep440(base, stage="a", revision=distance) }}
-    {%- endif -%}
-"""
-latest-tag = true
-pattern = '^v(?P<base>\d+\.\d+\.\d+)'
-vcs = "git"
-
-[tool.commitizen]
-name = "cz_conventional_commits"
-style = [
-  [
-    "qmark",
-    "fg:#ff9d00 bold",
-  ],
-  [
-    "question",
-    "bold",
-  ],
-  [
-    "answer",
-    "fg:#ff9d00 bold",
-  ],
-  [
-    "pointer",
-    "fg:#ff9d00 bold",
-  ],
-  [
-    "highlighted",
-    "fg:#ff9d00 bold",
-  ],
-  [
-    "selected",
-    "fg:#cc5454",
-  ],
-  [
-    "separator",
-    "fg:#cc5454",
-  ],
-  [
-    "instruction",
-    "",
-  ],
-  [
-    "text",
-    "",
-  ],
-  [
-    "disabled",
-    "fg:#858585 italic",
-  ],
-]
-version_files = ["pyproject.toml:version"]
+[tool.semantic_release]
+branch         = "main"
+build_command  = "pip install poetry && poetry build"
+commit_author  = "dev@samarthj.com"
+commit_parser  = "semantic_release.history.emoji_parser"
+commit_subject = "{version} via python-semantic-release"
+patch_emoji    = ":ambulance:, :lock:, :bug:, :zap:, :goal_net:, :alien:, :wheelchair:, :speech_balloon:, :mag:, :apple:, :penguin:, :checkered_flag:, :robot:, :green_apple:, :bookmark:, :construction_worker:"
+remove_dist    = true
+upload_to_pypi = true
+version_toml   = ['pyproject.toml:tool.poetry.version']
