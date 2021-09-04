@@ -56,7 +56,7 @@ requires      = ["poetry-core>=1.0.0"]
 [tool.poe.tasks]
 format         = {cmd = "black --config pyproject.toml --color .", help = "Format code using black config"}
 format-imports = {cmd = "isort --settings-file pyproject.toml --color .", help = "Optimize and sort imports"}
-format-pycln   = {cmd = "pycln --diff --config pyproject.toml .", help = "Remove unused imports"}
+format-pycln   = {cmd = "pycln --config pyproject.toml .", help = "Remove unused imports"}
 lint           = {cmd = "pflake8", help = "Print lint errors"}
 lint-plugins   = {cmd = "pflake8 --version", help = "Print plugins used for linting"}
 style          = {cmd = "black --config pyproject.toml --color --diff .", help = "Check code style"}
