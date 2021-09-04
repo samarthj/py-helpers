@@ -16,3 +16,31 @@ Helpers for logging, sleeping, and other common functional work done across proj
 ## RetryHandler
 
 Samples can be found here in the [tests](https://github.com/samarthj/pylib-helpers/blob/main/tests/test_retry_handler.py)
+
+Example usage:
+
+```python
+
+from somelib import ClientError
+from helpers import Logger, RetryHandler, Sleeper
+
+LOGGER = Logger()
+SLEEPER = Sleeper()
+
+def _client_error(err_obj):
+    err_msg = str(err_obj)
+    if "Recoverable" not in err_msg:
+        raise err_obj
+    else:
+        LOGGER.print_error(err_msg)
+        SLEEPER.normal_sleep()
+
+@RetryHandler(
+    (ClientError),
+    max_retries=10,
+    wait_time=0,
+    err_callbacks={"ClientError": (_client_error, {})},
+).wrap
+def do_the_thing(data):
+    pass
+```
