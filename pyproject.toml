@@ -42,7 +42,7 @@ isort                        = {version = "*", allow-prereleases = true}
 mccabe                       = {version = "*", allow-prereleases = true}
 mypy                         = {version = "*", allow-prereleases = true}
 pep8-naming                  = {version = "*", allow-prereleases = true}
-pycln                        = {version = "*", allow-prereleases = true}
+pycln                        = {version = "*", allow-prereleases = true, python = ">=3.9,<3.10"}
 pylint                       = {version = "*", allow-prereleases = true}
 pyproject-flake8             = {version = "*", allow-prereleases = true}
 pytest                       = {version = "*", allow-prereleases = true}
