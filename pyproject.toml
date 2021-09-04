@@ -115,7 +115,6 @@ exclude      = '(__pypackages__|__pycache__|\.pytest_cache|\.github|\.git|\.venv
 expand_stars = true
 include      = '(helpers|tests).*\.py$'
 no_gitignore = false
-path         = "helpers"
 verbose      = false
 
 [tool.semantic_release]
