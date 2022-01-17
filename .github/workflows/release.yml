@@ -35,14 +35,14 @@ jobs:
         uses: actions/cache@main
         with:
           path: ${{ steps.pip-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-pip-poetry-poe-semver
+          key: ${{ runner.os }}-pip-poetry-poe-pycln
           restore-keys: |
-            ${{ runner.os }}-pip-poetry-poe-semver
+            ${{ runner.os }}-pip-poetry-poe-pycln
       - name: Install system dependencies
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install poetry poethepoet
+          pip install poetry poethepoet pycln
       - name: Get poetry cache dir
         id: poetry-cache-dir
         shell: bash
