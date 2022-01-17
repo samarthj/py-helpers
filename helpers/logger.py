@@ -53,7 +53,7 @@ class Logger:
         print(f"{Fore.RED}[ERROR] {arg}", file=sys.stderr, sep="\n", end="\n", flush=True)
         if isinstance(arg, Exception):
             err: Exception = arg
-            traceback.print_exception(etype=type(err), value=err, tb=err.__traceback__, file=sys.stderr, limit=5000)
+            traceback.print_exception(type(err), value=err, tb=err.__traceback__, file=sys.stderr, limit=5000)
         print(Style.RESET_ALL, file=sys.stderr, sep="", end="", flush=True)
 
     def print_error(self, *args):
