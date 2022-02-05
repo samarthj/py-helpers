@@ -610,7 +610,7 @@ toml = "*"
 
 [[package]]
 name = "pytest"
-version = "7.0.0rc1"
+version = "7.0.0"
 description = "pytest: simple powerful testing with Python"
 category = "dev"
 optional = false
@@ -1143,8 +1143,8 @@ pyproject-flake8 = [
     {file = "pyproject_flake8-0.0.1a2-py2.py3-none-any.whl", hash = "sha256:e61ed1dc088e9f9f8a7170967ac4ec135acfef3a59ab9738c7b58cc11f294a7e"},
 ]
 pytest = [
-    {file = "pytest-7.0.0rc1-py3-none-any.whl", hash = "sha256:8fc363e0b7407a9397e660ef81e1634e4504faaeb6ad1d2416da4c38d29a0f45"},
-    {file = "pytest-7.0.0rc1.tar.gz", hash = "sha256:e1af71303d633af3376130b388e028342815cff74d2f3be4aeb22f3fd94325e6"},
+    {file = "pytest-7.0.0-py3-none-any.whl", hash = "sha256:42901e6bd4bd4a0e533358a86e848427a49005a3256f657c5c8f8dd35ef137a9"},
+    {file = "pytest-7.0.0.tar.gz", hash = "sha256:dad48ffda394e5ad9aa3b7d7ddf339ed502e5e365b1350e0af65f4a602344b11"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
