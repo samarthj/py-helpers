@@ -215,7 +215,7 @@ flake8 = ">=3.0,<3.2.0 || >3.2.0"
 
 [[package]]
 name = "flake8-expression-complexity"
-version = "0.0.10"
+version = "0.0.11"
 description = "A flake8 extension that checks expressions complexity"
 category = "dev"
 optional = false
@@ -886,8 +886,8 @@ flake8-comprehensions = [
     {file = "flake8_comprehensions-3.8.0-py3-none-any.whl", hash = "sha256:9406314803abe1193c064544ab14fdc43c58424c0882f6ff8a581eb73fc9bb58"},
 ]
 flake8-expression-complexity = [
-    {file = "flake8_expression_complexity-0.0.10-py3-none-any.whl", hash = "sha256:42daa9f16e982083febafd2eecc2c98090cb50b5e60d3c08e4c0395803d16d32"},
-    {file = "flake8_expression_complexity-0.0.10.tar.gz", hash = "sha256:2c91a55601077a555dcd3e5998063773585b323b63fec654e2b674867f3e0040"},
+    {file = "flake8_expression_complexity-0.0.11-py3-none-any.whl", hash = "sha256:b56bac37f7dd5d3d102a7111c89f6579c2cbd897b868147794c9ed12aadc627c"},
+    {file = "flake8_expression_complexity-0.0.11.tar.gz", hash = "sha256:4dd8909fecbc20f53814cdcef9d0b04f61532764278d9b6e8026686812e96631"},
 ]
 flake8-functions = [
     {file = "flake8_functions-0.0.7-py3-none-any.whl", hash = "sha256:f2f75545c2b0df9eeba0ad316e2ac38c101676970b4441300fc07af3226a44f6"},
