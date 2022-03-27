@@ -295,7 +295,7 @@ flake8-plugin-utils = ">=1.3.2,<2.0.0"
 
 [[package]]
 name = "flake8-simplify"
-version = "0.18.1"
+version = "0.18.2"
 description = "flake8 plugin which checks for code that can be simplified"
 category = "dev"
 optional = false
@@ -598,7 +598,7 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pyproject-flake8"
-version = "0.0.1a2"
+version = "0.0.1a3"
 description = "pyproject-flake8 (`pflake8`), a monkey patching wrapper to connect flake8 with pyproject.toml configuration"
 category = "dev"
 optional = false
@@ -606,7 +606,7 @@ python-versions = "*"
 
 [package.dependencies]
 flake8 = "*"
-toml = "*"
+tomli = {version = "*", markers = "python_version < \"3.11.0a7\""}
 
 [[package]]
 name = "pytest"
@@ -914,8 +914,8 @@ flake8-pytest-style = [
     {file = "flake8_pytest_style-1.6.0-py3-none-any.whl", hash = "sha256:5fedb371a950e9fe0e0e6bfc854be7d99151271208f34cd2cc517681ece27780"},
 ]
 flake8-simplify = [
-    {file = "flake8_simplify-0.18.1-py3-none-any.whl", hash = "sha256:a4a0fcaad8fa0ad17634c6fa4ff62ebe4835bef48d78d3104eb528140cf0972b"},
-    {file = "flake8_simplify-0.18.1.tar.gz", hash = "sha256:8344a6a77b214ad7b3559d06a42c97333b73b11034abb018ea02cebba9fdebf1"},
+    {file = "flake8_simplify-0.18.2-py3-none-any.whl", hash = "sha256:accdfbc1228d04be824ab16243df2b3731bb0517c4fd1c80f1b7a8ddcc42ee3e"},
+    {file = "flake8_simplify-0.18.2.tar.gz", hash = "sha256:9c4ccb709d7f91660cb43799f845903380cceacce4e5a76db73fb0beed4bb935"},
 ]
 flake8-use-fstring = [
     {file = "flake8-use-fstring-1.3.tar.gz", hash = "sha256:1bd4a409adbb93e64e711fdd26b88759c33792e3899f174edc68ddf7307e81b6"},
@@ -1115,8 +1115,8 @@ pyparsing = [
     {file = "pyparsing-3.0.7.tar.gz", hash = "sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea"},
 ]
 pyproject-flake8 = [
-    {file = "pyproject-flake8-0.0.1a2.tar.gz", hash = "sha256:bdeca37f78ecd34bd64a49d3657d53d099f5445831071a31c46e1fe20cd61461"},
-    {file = "pyproject_flake8-0.0.1a2-py2.py3-none-any.whl", hash = "sha256:e61ed1dc088e9f9f8a7170967ac4ec135acfef3a59ab9738c7b58cc11f294a7e"},
+    {file = "pyproject-flake8-0.0.1a3.tar.gz", hash = "sha256:4e3e704c639e61d9ab75aadf44dbf31a07281035896ad7d725ed7f386fd79674"},
+    {file = "pyproject_flake8-0.0.1a3-py2.py3-none-any.whl", hash = "sha256:1f434780791df82e9ca2358f4c542a2b2fdd3a77e666a6ad3f60a6a1464da4e2"},
 ]
 pytest = [
     {file = "pytest-7.1.1-py3-none-any.whl", hash = "sha256:92f723789a8fdd7180b6b06483874feca4c48a5c76968e03bb3e7f806a1869ea"},
