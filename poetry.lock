@@ -136,7 +136,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "commitizen"
-version = "2.23.0"
+version = "2.24.0"
 description = "Python commitizen client tool"
 category = "dev"
 optional = false
@@ -541,7 +541,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pycln"
-version = "1.2.5"
+version = "1.3.1"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
@@ -552,7 +552,7 @@ libcst = ">=0.3.10,<0.4.0"
 pathspec = ">=0.9.0,<0.10.0"
 pyyaml = ">=5.3.1,<6.0.0"
 toml = ">=0.10.1,<0.11.0"
-typer = ">=0.4.0,<0.5.0"
+typer = ">=0.4.1,<0.5.0"
 
 [[package]]
 name = "pycodestyle"
@@ -862,8 +862,8 @@ colorama = [
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 commitizen = [
-    {file = "commitizen-2.23.0-py3-none-any.whl", hash = "sha256:11497f3733f30f7a5408a9118e031bd53344c996d656550289a83fa3b6d511cc"},
-    {file = "commitizen-2.23.0.tar.gz", hash = "sha256:5685d44ac235e3da0a02592e11c92aeebcf4864e059a6f5a59382207264fb671"},
+    {file = "commitizen-2.24.0-py3-none-any.whl", hash = "sha256:08901b176eac6a224761d613b58fb8b19bc7d00a49282a4d4bc39e3bdb3afb50"},
+    {file = "commitizen-2.24.0.tar.gz", hash = "sha256:c867c26a394b255a93a8a225dae793dd361b25160be39015d2aa75d730728295"},
 ]
 decli = [
     {file = "decli-0.5.2-py3-none-any.whl", hash = "sha256:d3207bc02d0169bf6ed74ccca09ce62edca0eb25b0ebf8bf4ae3fb8333e15ca0"},
@@ -1095,8 +1095,8 @@ py = [
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pycln = [
-    {file = "pycln-1.2.5-py3-none-any.whl", hash = "sha256:0e58d9dc277adfea018e3a8f1876dd0bb802a9a201e65261b791eecd63372f9b"},
-    {file = "pycln-1.2.5.tar.gz", hash = "sha256:902217626b6bd2a7b32287af3a59a23f614b50baa4744ac33f85ecc05130da64"},
+    {file = "pycln-1.3.1-py3-none-any.whl", hash = "sha256:4ebefa28b01cf9f9c82e2799adf984a09cfb5aa065b56671ee6899379af71f00"},
+    {file = "pycln-1.3.1.tar.gz", hash = "sha256:84654556591c73c972bbca306520fe4ab454edae1123deccb39da4bf705d5a68"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.8.0-py2.py3-none-any.whl", hash = "sha256:720f8b39dde8b293825e7ff02c475f3077124006db4f440dcbc9a20b76548a20"},
