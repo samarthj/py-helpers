@@ -549,7 +549,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pycln"
-version = "1.3.3"
+version = "1.3.4"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
@@ -1137,8 +1137,8 @@ py = [
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pycln = [
-    {file = "pycln-1.3.3-py3-none-any.whl", hash = "sha256:dc59f25ae8147420d641dc9e2338af9850ebf09b55972355332402ec412dc192"},
-    {file = "pycln-1.3.3.tar.gz", hash = "sha256:ce31864993a3b34e021b107847b7975edcf31da05d6ce849562c132e50c2c444"},
+    {file = "pycln-1.3.4-py3-none-any.whl", hash = "sha256:4b03a71adf00c51b7d861cb0b4989ccdbc70d0e560c39d6726dc9f1943feaf0a"},
+    {file = "pycln-1.3.4.tar.gz", hash = "sha256:dfbe1be62e9040c2c864aa18cd7496491d924ac51cc34ef401c2f81815a14948"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.8.0-py2.py3-none-any.whl", hash = "sha256:720f8b39dde8b293825e7ff02c475f3077124006db4f440dcbc9a20b76548a20"},
