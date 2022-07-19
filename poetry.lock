@@ -549,7 +549,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pycln"
-version = "2.0.2"
+version = "2.0.4"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
@@ -560,7 +560,7 @@ libcst = ">=0.3.10,<0.5.0"
 pathspec = ">=0.9.0,<0.10.0"
 pyyaml = ">=5.3.1,<7.0.0"
 toml = ">=0.10.1,<0.11.0"
-typer = ">=0.4.1,<0.6.0"
+typer = ">=0.4.1,<0.7.0"
 
 [[package]]
 name = "pycodestyle"
@@ -777,7 +777,7 @@ python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "typer"
-version = "0.5.0"
+version = "0.6.1"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
 category = "dev"
 optional = false
@@ -1158,8 +1158,8 @@ py = [
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pycln = [
-    {file = "pycln-2.0.2-py3-none-any.whl", hash = "sha256:9013902b20111081f4de21ea0a6ac52997a60e53f78ec37e99f89ff1564e0406"},
-    {file = "pycln-2.0.2.tar.gz", hash = "sha256:f2df02277774cb718cd4e51c7b3f335d4e4b0b5ade800457fc117ecc975ce2cd"},
+    {file = "pycln-2.0.4-py3-none-any.whl", hash = "sha256:38adeb6d068a9ccaa1789933734d7fbe3ebb0fc40339e0e21e6f33defa948546"},
+    {file = "pycln-2.0.4.tar.gz", hash = "sha256:a9b78017be21a7e29e2c9d205addc6048fa8df2b8da19303d97f828c0c818432"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.8.0-py2.py3-none-any.whl", hash = "sha256:720f8b39dde8b293825e7ff02c475f3077124006db4f440dcbc9a20b76548a20"},
@@ -1264,8 +1264,8 @@ tomlkit = [
     {file = "tomlkit-0.11.1.tar.gz", hash = "sha256:61901f81ff4017951119cd0d1ed9b7af31c821d6845c8c477587bbdcd5e5854e"},
 ]
 typer = [
-    {file = "typer-0.5.0-py3-none-any.whl", hash = "sha256:a34409c0029ba7e48cb9e4f54c6400bf4158a6145b5dea32788e7a36ebbcb312"},
-    {file = "typer-0.5.0.tar.gz", hash = "sha256:4c285a5585c94d32c305444af934f0078b6a8ba91464f3f85807c91cd499d195"},
+    {file = "typer-0.6.1-py3-none-any.whl", hash = "sha256:54b19e5df18654070a82f8c2aa1da456a4ac16a2a83e6dcd9f170e291c56338e"},
+    {file = "typer-0.6.1.tar.gz", hash = "sha256:2d5720a5e63f73eaf31edaa15f6ab87f35f0690f8ca233017d7d23d743a91d73"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},
