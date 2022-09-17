@@ -135,14 +135,8 @@ jobs:
       - name: Create bump and changelog
         id: cz
         if: ${{ steps.git.outcome == 'success' }}
-        uses: commitizen-tools/commitizen-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          changelog_increment_filename: body.md
-
-      - name: Print Version
-        if: ${{ steps.cz.outcome == 'success' }}
-        run: echo "Bumped to version ${{ steps.cz.outputs.version }}"
+        run: |
+          poetry run cz --no-raise 21 bump --yes --changelog --changelog-to-stdout >body.md
 
       - name: Build with poetry
         id: build
