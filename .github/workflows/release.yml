@@ -108,8 +108,8 @@ jobs:
         if: ${{ steps.update.outcome == 'success' }}
         uses: crazy-max/ghaction-import-gpg@v5
         with:
-          gpg-private-key: ${{ secrets.PGP_PRIVATE_KEY }}
-          git-user-signingkey: true
+          gpg_private_key: ${{ secrets.PGP_PRIVATE_KEY }}
+          git_user_signingkey: true
           git_commit_gpgsign: true
 
       - name: Setup git config
