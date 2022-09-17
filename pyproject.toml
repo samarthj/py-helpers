@@ -6,7 +6,7 @@ classifiers = [
 ]
 description = "Helpers for common functional work done across several projects"
 homepage = "https://github.com/samarthj/pylib-helpers"
-license = "GPL-3.0-or-later"
+license     = "LGPL-3.0-or-later"
 name = "pylib-helpers"
 packages = [{include = "helpers"}]
 readme = "README.md"
