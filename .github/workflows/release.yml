@@ -135,7 +135,7 @@ jobs:
         id: github_release
         if: ${{ steps.git.outcome == 'success' }}
         continue-on-error: true
-        run: semantic-release changelog
+        run: poetry run cz bump --changelog
 
       - name: Build with poetry
         id: build
