@@ -2,5 +2,9 @@
 parallel = true
 
 [virtualenvs]
-path = ".venv"
+create     = true
 in-project = true
+path       = ".venv"
+
+[repositories.testpypi]
+url = "https://test.pypi.org/legacy"
