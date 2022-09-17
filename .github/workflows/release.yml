@@ -166,11 +166,11 @@ jobs:
         if: ${{ steps.build.outcome == 'success' }}
         continue-on-error: true
         run: |
-          poetry publish -r testpypi -u __token__ -p ${{ secrets.TEST_PYPI_TOKEN }} --no-interaction
+          poetry publish -r testpypi -u __token__ -p ${{ secrets.TEST_PYPI_TOKEN }} --no-interaction --skip-existing
 
       - name: Publish distribution 📦 to PyPI
         id: pypi
         if: ${{ steps.test_pypi.outcome == 'success' }}
         continue-on-error: true
         run: |
-          poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }} --no-interaction
+          poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }} --no-interaction --skip-existing
