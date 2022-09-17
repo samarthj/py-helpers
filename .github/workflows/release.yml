@@ -58,7 +58,9 @@ jobs:
           path: ${{ steps.poetry-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}
+            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
+            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}
+            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}
 
       - name: Update the project
         id: update
