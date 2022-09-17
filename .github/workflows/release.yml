@@ -58,7 +58,6 @@ jobs:
           path: ${{ steps.poetry-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
             ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}-${{ hashFiles('pyproject.toml') }}
             ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ github.repository }}
 
@@ -133,17 +132,34 @@ jobs:
           git pull --rebase
           echo "::endgroup::"
 
-      - name: Github Release
-        id: github_release
+      - name: Create bump and changelog
+        id: cz
         if: ${{ steps.git.outcome == 'success' }}
-        continue-on-error: true
-        run: poetry run cz bump --changelog
+        uses: commitizen-tools/commitizen-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          changelog_increment_filename: body.md
+
+      - name: Print Version
+        if: ${{ steps.cz.outcome == 'success' }}
+        run: echo "Bumped to version ${{ steps.cz.outputs.version }}"
 
       - name: Build with poetry
         id: build
-        if: ${{ steps.github_release.outcome == 'success' }}
+        if: ${{ steps.cz.outcome == 'success' }}
         continue-on-error: true
         run: poetry build -v --no-interaction
+
+      - name: Github Release
+        id: github_release
+        if: ${{ steps.cz.outcome == 'success' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: 'body.md'
+          tag_name: ${{ env.REVISION }}
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish distribution 📦 to Test PyPI
         id: test_pypi
